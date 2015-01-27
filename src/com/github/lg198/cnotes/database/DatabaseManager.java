@@ -5,6 +5,7 @@ package com.github.lg198.cnotes.database;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -87,8 +88,15 @@ public class DatabaseManager {
 	}
 	
 	public static void updateStudent(Student s) throws SQLException {
-		connection.createStatement().execute("UPDATE student SET firstname=\"" + s.getFirstName() + "\", lastname=\"" + 
-				s.getLastName() + "\" WHERE id = \"" + s.getId() + "\"");
+		connection.createStatement().execute("UPDATE student SET firstname=\"" + s.getFirstName() + "\", lastname=\"" + s.getLastName() + "\"");
+			
+	}
+	
+	public static void loadNames(Reader r) throws IOException {
+		BufferedReader br = new BufferedReader(r);
+		for (String s = ""; (s = br.readLine()) != null;) {
+			
+		}
 	}
 	
 	

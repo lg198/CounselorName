@@ -2,22 +2,23 @@
 //Date created: Jan 23, 2015
 package com.github.lg198.cnotes.core;
 
-import java.lang.reflect.InvocationTargetException;
+import java.io.File;
 import java.sql.SQLException;
 
 import com.alee.laf.WebLookAndFeel;
 import com.alee.managers.tooltip.TooltipManager;
 import com.alee.utils.SwingUtils;
 import com.github.lg198.cnotes.database.DatabaseManager;
-import com.github.lg198.cnotes.gui.GuiLogin;
 import com.github.lg198.cnotes.gui.GuiMain;
 
 public class CounselorNotesMain {
 	
 	public static GuiMain gui;
+	public static File folder;
 
 	public static void main(String[] args) throws Exception {
-		DatabaseManager.init("org.sqlite.JDBC", "jdbc:sqlite:C:\\Users\\Layne\\Documents\\code\\test\\counselornotes\\test.db");
+		folder = new File("/Users/lg198/Documents/");
+		DatabaseManager.init("org.sqlite.JDBC", "jdbc:sqlite:" + folder.getPath() + "cndb.db");
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
@@ -37,7 +38,7 @@ public class CounselorNotesMain {
 					gui = new GuiMain();
 				}
 			});
-		} catch (InvocationTargetException | InterruptedException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

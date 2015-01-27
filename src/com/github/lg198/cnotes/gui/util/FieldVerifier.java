@@ -54,7 +54,7 @@ public class FieldVerifier {
 	private boolean hasLC(JComponent c) {
 		try {
 			c.getClass().getMethod("setLeadingComponent", JComponent.class);
-		} catch (NoSuchMethodException | SecurityException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -66,7 +66,7 @@ public class FieldVerifier {
 			Method m = c.getClass().getMethod("setLeadingComponent", JComponent.class);
 			m.setAccessible(true);
 			m.invoke(c, lc);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
