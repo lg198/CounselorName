@@ -103,7 +103,6 @@ public class GuiAddStudent {
 		
 		wf.setSize(new Dimension(350, 220));
 		wf.setLocationRelativeTo(null);
-		wf.setDefaultCloseOperation(WebFrame.EXIT_ON_CLOSE);
 		wf.setVisible(true);
 	}
 

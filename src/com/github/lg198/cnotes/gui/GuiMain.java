@@ -2,29 +2,33 @@
 //Date created: Jan 25, 2015
 package com.github.lg198.cnotes.gui;
 
+import java.awt.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.Icon;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 
 import com.alee.extended.panel.GroupPanel;
 import com.alee.extended.panel.GroupingType;
 import com.alee.extended.tab.DocumentData;
 import com.alee.extended.tab.WebDocumentPane;
+import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
+import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.splitpane.WebSplitPane;
 import com.alee.laf.text.WebTextField;
-import com.alee.utils.TextUtils;
+import com.alee.utils.WindowUtils;
 import com.alee.utils.swing.WebTimer;
 import com.github.lg198.cnotes.bean.Student;
 import com.github.lg198.cnotes.core.Givens;
@@ -41,6 +45,8 @@ public class GuiMain {
 	
 	private WebButton addButton = new WebButton("Add", IconLoader.getIcon("add_green", 14, 14));
 	private WebButton removeButton = new WebButton("Remove", IconLoader.getIcon("remove_red", 14, 14));
+	
+	private WebDialog loginDialog = new WebDialog();
 	
 	public GuiMain() {
 		init();
@@ -68,6 +74,14 @@ public class GuiMain {
 		wf.setExtendedState(wf.getExtendedState() | WebFrame.MAXIMIZED_BOTH);
 		wf.setDefaultCloseOperation(WebFrame.EXIT_ON_CLOSE);
 		wf.setVisible(true);
+		
+		WebLookAndFeel.setDecorateDialogs(true);
+		loginDialog = new WebDialog(wf, Givens.fullName(), Dialog.ModalityType.DOCUMENT_MODAL);
+		loginDialog.add(new WebButton("hi"));
+		WindowUtils.packAndCenter(loginDialog);
+		loginDialog.setLocationRelativeTo(null);
+		loginDialog.setVisible(true);
+		WebLookAndFeel.setDecorateDialogs(false);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -82,6 +96,7 @@ public class GuiMain {
 				try {
 					List<Student> l = DatabaseManager.searchStudents(searchField.getText());
 					searchModel.setNames(l);
+					removeButton.setEnabled(false);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -101,6 +116,22 @@ public class GuiMain {
 				search();
 			}
 		});
+		
+		searchResults.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (searchResults.getSelectedIndex() > -1) {
+					removeButton.setEnabled(true);
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {		
+			}
+			
+		});
+		searchResults.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		addButton.setRolloverDecoratedOnly(true);
 		removeButton.setRolloverDecoratedOnly(true);
