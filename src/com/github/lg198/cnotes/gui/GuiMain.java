@@ -10,11 +10,14 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.alee.extended.panel.GroupPanel;
 import com.alee.extended.panel.GroupingType;
@@ -22,8 +25,12 @@ import com.alee.extended.tab.DocumentData;
 import com.alee.extended.tab.WebDocumentPane;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
+import com.alee.laf.filechooser.WebFileChooser;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
+import com.alee.laf.menu.WebMenu;
+import com.alee.laf.menu.WebMenuBar;
+import com.alee.laf.menu.WebMenuItem;
 import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.rootpane.WebFrame;
@@ -43,6 +50,7 @@ public class GuiMain {
 	private WebDocumentPane studentPane = new WebDocumentPane();
 	private WebSplitPane split = new WebSplitPane();
 	private WebScrollPane scroll = new WebScrollPane(searchResults);
+	private WebMenuBar menuBar = new WebMenuBar();
 	
 	private WebButton addButton = new WebButton("Add", IconLoader.getIcon("add_green", 14, 14));
 	private WebButton removeButton = new WebButton("Remove", IconLoader.getIcon("remove_red", 14, 14));
@@ -69,6 +77,8 @@ public class GuiMain {
 		split.setMargin(10);
 		split.setDividerLocation(200);
 		
+		loadMenuBar(wf);
+		wf.setJMenuBar(menuBar);
 		
 		wf.getContentPane().add(split);
 		
@@ -182,8 +192,39 @@ public class GuiMain {
 		});
 	}
 	
+	public void loadMenuBar(final WebFrame wf) {
+		WebMenu fileMenu = new WebMenu("File");
+		WebMenuItem importItem = new WebMenuItem("Import student names...");
+		importItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				final WebFileChooser chooser = new WebFileChooser();
+				chooser.setMultiSelectionEnabled(false);
+				chooser.setAcceptAllFileFilterUsed(false);
+				chooser.addChoosableFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
+				if(chooser.showOpenDialog(wf) == WebFileChooser.APPROVE_OPTION) {
+					final GuiImport gimp = new GuiImport(wf);
+					new Thread() {
+						@Override
+						public void run() {
+							try {
+								DatabaseManager.loadNames(new FileReader(chooser.getSelectedFile()));
+								gimp.wd.dispose();
+							} catch (FileNotFoundException e) {
+							}
+						}
+					}.start();
+				}
+			}
+		});
+		fileMenu.add(importItem);
+		menuBar.add(fileMenu);
+	}
+	
 	public void openStudent(Student st) {
-		studentPane.openDocument(new DocumentData("student." + st.getId(), null, (String)st.getName(), null));
+		String id = "tudent." + st.getId();
+		studentPane.openDocument(new DocumentData(id, null, (String)st.getName(), null));
+		studentPane.getPane(id).activate();
 	}
 
 }
