@@ -3,6 +3,7 @@
 package com.github.lg198.cnotes.gui;
 
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -23,12 +24,12 @@ import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.laf.rootpane.WebDialog;
 import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.splitpane.WebSplitPane;
 import com.alee.laf.text.WebTextField;
-import com.alee.utils.WindowUtils;
 import com.alee.utils.swing.WebTimer;
 import com.github.lg198.cnotes.bean.Student;
 import com.github.lg198.cnotes.core.Givens;
@@ -73,13 +74,12 @@ public class GuiMain {
 		
 		wf.setExtendedState(wf.getExtendedState() | WebFrame.MAXIMIZED_BOTH);
 		wf.setDefaultCloseOperation(WebFrame.EXIT_ON_CLOSE);
+		wf.setMinimumSize(new Dimension(640, 480));
 		wf.setVisible(true);
 		
 		WebLookAndFeel.setDecorateDialogs(true);
 		loginDialog = new WebDialog(wf, Givens.fullName(), Dialog.ModalityType.DOCUMENT_MODAL);
-		loginDialog.add(new WebButton("hi"));
-		WindowUtils.packAndCenter(loginDialog);
-		loginDialog.setLocationRelativeTo(null);
+		new GuiLogin(loginDialog);
 		loginDialog.setVisible(true);
 		WebLookAndFeel.setDecorateDialogs(false);
 	}
@@ -88,8 +88,9 @@ public class GuiMain {
 	public void initComponents() {
 		searchResults.setModel(searchModel);
 		searchField.setInputPrompt("Search Students...");
-		searchField.setLeadingComponent(new WebLabel(IconLoader.getIcon("search_blue", 16, 16)).setMargin(0, 0, 0, 3));
+		searchField.setLeadingComponent(new WebLabel(IconLoader.getIcon("search_blue", 16, 16)).setMargin(0, 2, 0, 3));
 		searchField.setRound(4);
+		searchField.setFontSize(14);
 		searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
 			
 			private void search() {
@@ -121,7 +122,7 @@ public class GuiMain {
 
 			@Override
 			public void focusGained(FocusEvent e) {
-				if (searchResults.getSelectedIndex() > -1) {
+				if (searchResults.getSelectedIndex() > -1 && searchModel.getSize() > 0) {
 					removeButton.setEnabled(true);
 				}
 			}
@@ -136,6 +137,26 @@ public class GuiMain {
 		addButton.setRolloverDecoratedOnly(true);
 		removeButton.setRolloverDecoratedOnly(true);
 		removeButton.setEnabled(false);
+		removeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (searchModel.getSize() > 0 && searchResults.getSelectedIndex() > -1) {
+					Student selected = searchModel.getStudentAt(searchResults.getSelectedIndex());
+					try {
+						DatabaseManager.deleteStudent(selected);
+						List<Student> l = searchModel.getStudents();
+						l.remove(selected);
+						searchModel.setNames(l);
+						if (studentPane.getDocument("student." + selected.getId()) != null) {
+							studentPane.closeDocument("student." + selected.getId());
+						}
+					} catch (SQLException e1) {
+						WebOptionPane.showMessageDialog(null, "A database error has occurred: student could not be deleted!", "Error", 
+								WebOptionPane.ERROR_MESSAGE, null);
+					}
+				}
+			}
+		});
 		
 		addButton.addActionListener(new ActionListener() {
 			WebTimer wt;

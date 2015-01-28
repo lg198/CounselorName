@@ -89,7 +89,10 @@ public class DatabaseManager {
 	
 	public static void updateStudent(Student s) throws SQLException {
 		connection.createStatement().execute("UPDATE student SET firstname=\"" + s.getFirstName() + "\", lastname=\"" + s.getLastName() + "\"");
-			
+	}
+	
+	public static void deleteStudent(Student s) throws SQLException {
+		connection.createStatement().execute("DELETE FROM student WHERE id=\"" + s.getId() + "\"");
 	}
 	
 	public static void loadNames(Reader r) throws IOException {

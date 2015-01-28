@@ -38,11 +38,12 @@ public class FieldVerifier {
 	
 	public boolean verify() {
 		for (JComponent c : popovers.keySet()) {
-			if (!fvl.verify(c)) {
+			VerificationResult result = fvl.verify(c);
+			if (!result.verify()) {
 				WebLabel wl = new WebLabel(IconLoader.getIcon("warning_orange", 18, 18)).setMargin(0, 2, 0, 0);
 				popovers.get(c).dispose();
 				popovers.put(c, new WebPopOver());
-				popovers.get(c).add(new WebLabel("This field must not be empty!"));
+				popovers.get(c).add(new WebLabel(result.getMessage()));
 				callLC(c, wl);
 				popovers.get(c).show(wl, PopOverDirection.up);
 				return false;
@@ -73,8 +74,7 @@ public class FieldVerifier {
 	
 	public static interface FieldVerificationListener {
 		
-		public boolean verify(JComponent source);
-		public String getMessage(JComponent source);
+		public VerificationResult verify(JComponent source);
 	}
 
 }

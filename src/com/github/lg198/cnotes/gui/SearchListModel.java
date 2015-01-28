@@ -22,6 +22,10 @@ public class SearchListModel implements ListModel {
 			ldl.contentsChanged(new ListDataEvent(this, ListDataEvent.CONTENTS_CHANGED, 0, names.size()));
 		}
 	}
+	
+	public List<Student> getStudents() {
+		return names;
+	}
 
 	@Override
 	public void addListDataListener(ListDataListener ldl) {

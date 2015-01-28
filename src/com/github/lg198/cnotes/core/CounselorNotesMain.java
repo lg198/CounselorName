@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.managers.tooltip.TooltipManager;
 import com.alee.utils.SwingUtils;
+import com.alee.utils.SystemUtils;
 import com.github.lg198.cnotes.database.DatabaseManager;
 import com.github.lg198.cnotes.gui.GuiMain;
 
@@ -17,7 +18,20 @@ public class CounselorNotesMain {
 	public static File folder;
 
 	public static void main(String[] args) throws Exception {
-		folder = new File("/Users/lg198/Documents/");
+		if (SystemUtils.isWindows()) {
+			String appdata = System.getenv("APPDATA");
+			if (appdata == null) {
+				appdata = System.getProperty("user.home");
+			}
+			folder = new File(appdata, "CounselorNotes");
+		}else if (SystemUtils.isMac()) {
+			folder = new File(System.getProperty("user.home") + "/Library/Application Support/CounselorNotes");
+		}else {
+			folder = new File(System.getProperty("user.home") + "CounselorNotes");
+		}
+		if (!folder.exists()) {
+			folder.mkdirs();
+		}
 		DatabaseManager.init("org.sqlite.JDBC", "jdbc:sqlite:" + folder.getPath() + "cndb.db");
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override

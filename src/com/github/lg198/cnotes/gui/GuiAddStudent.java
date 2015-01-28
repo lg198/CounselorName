@@ -24,6 +24,7 @@ import com.github.lg198.cnotes.database.DatabaseManager;
 import com.github.lg198.cnotes.gui.util.FieldVerifier;
 import com.github.lg198.cnotes.gui.util.FieldVerifier.FieldVerificationListener;
 import com.github.lg198.cnotes.gui.util.IconLoader;
+import com.github.lg198.cnotes.gui.util.VerificationResult;
 
 public class GuiAddStudent {
 	
@@ -48,17 +49,12 @@ public class GuiAddStudent {
 		verifier = new FieldVerifier(new FieldVerificationListener() {
 
 			@Override
-			public boolean verify(JComponent source) {
+			public VerificationResult verify(JComponent source) {
 				if (source.equals(fnField)) {
-					return !fnField.getText().isEmpty();
+					return new VerificationResult(!fnField.getText().isEmpty(), "The first name cannot be empty!");
 				} else {
-					return !lnField.getText().isEmpty();
+					return new VerificationResult(!lnField.getText().isEmpty(), "The last name cannot be empty!");
 				}
-			}
-
-			@Override
-			public String getMessage(JComponent source) {
-				return "This field cannot be empty!";
 			}
 			 
 		 }, lnField, fnField);
