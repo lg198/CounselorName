@@ -22,6 +22,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.alee.extended.panel.GroupPanel;
 import com.alee.extended.panel.GroupingType;
 import com.alee.extended.tab.DocumentData;
+import com.alee.extended.tab.DocumentListener;
+import com.alee.extended.tab.PaneData;
 import com.alee.extended.tab.WebDocumentPane;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
@@ -104,13 +106,7 @@ public class GuiMain {
 		searchField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
 			
 			private void search() {
-				try {
-					List<Student> l = DatabaseManager.searchStudents(searchField.getText());
-					searchModel.setNames(l);
-					removeButton.setEnabled(false);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				updateSearch();
 			}
 			@Override
 			public void changedUpdate(DocumentEvent e) {
@@ -190,6 +186,7 @@ public class GuiMain {
 				}
 			}
 		});
+		
 	}
 	
 	public void loadMenuBar(final WebFrame wf) {
@@ -222,9 +219,19 @@ public class GuiMain {
 	}
 	
 	public void openStudent(Student st) {
-		String id = "tudent." + st.getId();
-		studentPane.openDocument(new DocumentData(id, null, (String)st.getName(), null));
-		studentPane.getPane(id).activate();
+		String id = "student." + st.getId();
+		studentPane.openDocument(new DocumentData(id, IconLoader.getIcon("student_blue", 16), (String)st.getName(), null));
+		studentPane.setSelected(id);
+	}
+	
+	public void updateSearch() {
+		try {
+			List<Student> l = DatabaseManager.searchStudents(searchField.getText());
+			searchModel.setNames(l);
+			removeButton.setEnabled(false);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

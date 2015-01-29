@@ -132,6 +132,10 @@ public class DatabaseManager {
 			return false;
 		}
 	}
+	
+	public static int countCustomFields() throws SQLException {
+		connection.createStatement().executeQuery("SELECT id FROM "
+	}
 
 	public static class DatabaseNotFoundException extends Exception {
 		public DatabaseNotFoundException(String s, Exception e) {

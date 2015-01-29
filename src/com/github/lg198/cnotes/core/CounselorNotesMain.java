@@ -32,7 +32,7 @@ public class CounselorNotesMain {
 		if (!folder.exists()) {
 			folder.mkdirs();
 		}
-		DatabaseManager.init("org.sqlite.JDBC", "jdbc:sqlite:" + folder.getPath() + "cndb.db");
+		DatabaseManager.init("org.sqlite.JDBC", "jdbc:sqlite:" + folder.getPath() + File.separator + "cndb.db");
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {

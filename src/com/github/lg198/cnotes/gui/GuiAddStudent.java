@@ -80,6 +80,7 @@ public class GuiAddStudent {
 						Student s = DatabaseManager.addStudent(firstName, lastName);
 						wf.dispose();
 						mainGui.openStudent(s);
+						mainGui.updateSearch();
 					} catch (SQLException e1) {
 						WebOptionPane.showMessageDialog(null, "A database error has occurred: student could not be saved!", "Error", 
 								WebOptionPane.ERROR_MESSAGE, null);
