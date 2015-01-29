@@ -33,6 +33,7 @@ public class CounselorNotesMain {
 			folder.mkdirs();
 		}
 		DatabaseManager.init("org.sqlite.JDBC", "jdbc:sqlite:" + folder.getPath() + File.separator + "cndb.db");
+		System.out.println(DatabaseManager.countCustomFields());
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {

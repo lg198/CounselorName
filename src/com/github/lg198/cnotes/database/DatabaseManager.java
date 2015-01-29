@@ -121,8 +121,8 @@ public class DatabaseManager {
 			for (String s = ""; (s = br.readLine()) != null;) {
 				Matcher m = p.matcher(s.trim());
 				if (m.matches()) {
-					String fn = m.group(1);
-					String ln = m.group(2);
+					String ln = m.group(1);
+					String fn = m.group(2);
 					addStudent(fn, ln);
 				}
 			}
@@ -134,7 +134,8 @@ public class DatabaseManager {
 	}
 	
 	public static int countCustomFields() throws SQLException {
-		connection.createStatement().executeQuery("SELECT id FROM "
+		ResultSet rs = connection.createStatement().executeQuery("SELECT COUNT(*) AS rcount FROM fieldDef");
+		return rs.getInt("rcount");
 	}
 
 	public static class DatabaseNotFoundException extends Exception {
