@@ -22,8 +22,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.alee.extended.panel.GroupPanel;
 import com.alee.extended.panel.GroupingType;
 import com.alee.extended.tab.DocumentData;
-import com.alee.extended.tab.DocumentListener;
-import com.alee.extended.tab.PaneData;
 import com.alee.extended.tab.WebDocumentPane;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
@@ -220,7 +218,7 @@ public class GuiMain {
 	
 	public void openStudent(Student st) {
 		String id = "student." + st.getId();
-		studentPane.openDocument(new DocumentData(id, IconLoader.getIcon("student_blue", 16), (String)st.getName(), null));
+		studentPane.openDocument(new DocumentData(id, IconLoader.getIcon("student_blue", 16), (String)st.getName(), new GuiStudent(st).getPanel()));
 		studentPane.setSelected(id);
 	}
 	
