@@ -1,6 +1,9 @@
 package com.github.lg198.cnotes.bean.field;
 
-import com.alee.laf.panel.WebPanel;
+import java.sql.SQLException;
+
+import com.github.lg198.cnotes.bean.Student;
+import com.github.lg198.cnotes.database.DatabaseManager;
 
 public class CustomField {
 	
@@ -30,6 +33,11 @@ public class CustomField {
 	
 	public CustomFieldType getType() {
 		return type;
+	}
+	
+	public void setValue(Student s, String v) throws SQLException {
+		value = v;
+		DatabaseManager.updateCustomField(s, this);
 	}
 
 }

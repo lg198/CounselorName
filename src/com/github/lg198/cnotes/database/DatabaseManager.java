@@ -137,16 +137,18 @@ public class DatabaseManager {
 	}
 	
 	public static List<CustomField> getCustomFields(Student s) throws SQLException {
-		ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM customField WHERE student = \"" + s.getId() + "\"");
 		List<CustomField> fields = new ArrayList<CustomField>();
-		PreparedStatement ps = connection.prepareStatement("SELECT * FROM fieldDef WHERE id = \"?\"");
+		ResultSet rs = execq("SELECT * FROM fieldDef");
 		while (rs.next()) {
-			String fid = rs.getString("fieldId");
-			String fv  = rs.getString("fieldValue");
-			ps.setString(1, fid);
-			ResultSet rs1 = ps.executeQuery();
+			ResultSet rs1 = execq("SELECT * FROM customField WHERE fieldId = \"" + rs.getString("id") +
+					"\" AND student = \"" + s.getId() + "\"");
 			if (rs1.next()) {
-				fields.add(new CustomField(fid, rs1.getString("name"), fv, CustomFieldType.valueOf(rs1.getString("fieldType"))));
+				fields.add(new CustomField(rs.getString("id"), rs.getString("name"), 
+						rs1.getString("fieldValue"), CustomFieldType.valueOf(rs.getString("fieldType"))));
+			} else {
+				fields.add(new CustomField(rs.getString("id"), rs.getString("name"),
+						"", CustomFieldType.valueOf(rs.getString("fieldType"))));
+				execf("INSERT INTO customField VALUES (\"%s\", \"%s\", \"%s\")", rs.getString("id"), s.getId(), " ");
 			}
 			rs1.close();
 		}
@@ -160,19 +162,23 @@ public class DatabaseManager {
 	}
 	
 	public static boolean customFieldExists(String name) throws SQLException {
-		ResultSet rs = connection.createStatement().executeQuery("SELECT COUNT(*) AS rcount FROM fieldDef");
-		return rs.getInt("rcount") != 0;
+		return countCustomFields() != 0;
 	}
 	
 	public static void createCustomField(String name, CustomFieldType type) throws SQLException {
 		String fid =  name.replaceAll("\\s", "_").toLowerCase();
 		execf("INSERT INTO fieldDef VALUES (\"%s\", \"%s\", \"%s\")", fid, name, type.name());
-		ResultSet rs = execq("SELECT id FROM student");
-		while (rs.next()) {
-			execf("INSERT INTO customField VALUES (\"%s\", \"%s\", \"%s\")", fid, rs.getString("id"), "");
-		}
-		rs.close();
 	}
+	
+	public static void updateCustomField(Student s, CustomField cf) throws SQLException {
+		ResultSet rs = execq("SELECT COUNT(*) AS rcount FROM customField WHERE student = \"" + s.getId() + "\"");
+		if (rs.getInt("rcount") == 0) {
+			execf("INSERT INTO customField VALUES (\"%s\", \"%s\", \"%s\")", cf.getId(), s.getId(), cf.getValue());
+		}else {
+			execf("UPDATE customField SET fieldValue = \"%s\" WHERE student = \"%s\" AND fieldId = \"%s\"", cf.getValue(), s.getId(), cf.getId());
+		}
+	}
+	
 	
 	
 	public static boolean exec(String s) throws SQLException {

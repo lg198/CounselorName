@@ -190,6 +190,7 @@ public class GuiMain {
 	public void loadMenuBar(final WebFrame wf) {
 		WebMenu fileMenu = new WebMenu("File");
 		WebMenuItem importItem = new WebMenuItem("Import student names...");
+		importItem.setIcon(IconLoader.getIcon("import_blue", 16));
 		importItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

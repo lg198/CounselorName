@@ -39,7 +39,7 @@ public class GuiStudent {
 			table.row();
 			for (CustomField cf : fields) {
 				table.addCell(new WebLabel(cf.getName() + ":").setFontSize(16)).spaceRight(10);
-				table.addCell(cf.getType().getPanel(cf.getName(), cf.getValue()));
+				table.addCell(cf.getType().getPanel(cf, student));
 				table.row();
 				table.addCell(new WebSeparator());
 			}

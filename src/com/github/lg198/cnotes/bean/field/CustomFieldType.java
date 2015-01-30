@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.sql.SQLException;
 
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -18,13 +19,19 @@ import com.alee.extended.transition.effects.curtain.CurtainType;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.text.WebTextField;
+import com.github.lg198.cnotes.bean.Student;
 
 public enum CustomFieldType{
 
 	TEXT {
 
 		@Override
-		public WebPanel getPanel(final String fieldName, String fieldValue) {
+		public WebPanel getPanel(final CustomField cf, final Student s) {
+			String fieldName = cf.getName(), fieldValue = cf.getValue();
+			final String emptyVal = "Set " + fieldName + "...";
+			if (fieldValue.trim().isEmpty()) {
+				fieldValue = emptyVal;
+			}
 			final WebButton button = new WebButton(fieldValue);
 			final WebTextField field = new WebTextField();
 			field.setInputPrompt("Edit " + fieldName + "...");
@@ -47,6 +54,9 @@ public enum CustomFieldType{
 			button.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					if (button.getText().equals(emptyVal)) {
+						field.setText("");
+					}
 					componentTransition.performTransition(field);
 				}
 			});
@@ -55,12 +65,16 @@ public enum CustomFieldType{
 				public void actionPerformed(ActionEvent e) {
 					String txt = field.getText().trim();
 					if (txt.isEmpty()) {
-						txt = "Set " + fieldName + "...";
+						txt = emptyVal;
 					}
 					button.setText(txt);
 					componentTransition.performTransition(button);
 					if (!txt.isEmpty()) {
-
+						try {
+							cf.setValue(s, txt);
+						} catch (SQLException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			});
@@ -86,8 +100,10 @@ public enum CustomFieldType{
 					int twidth = (int) fm.getStringBounds(field.getText() + "   ", (Graphics2D) field.getGraphics()).getWidth();
 					if (twidth > field.getWidth()) {
 						field.setSize(twidth + 10, field.getHeight());
-						field.getParent().revalidate();
-						field.getParent().repaint();
+						if (field.getParent() != null) {
+							field.getParent().revalidate();
+							field.getParent().repaint();
+						}
 					}
 				}
 
@@ -116,7 +132,7 @@ public enum CustomFieldType{
 	NUMBER {
 
 		@Override
-		public WebPanel getPanel(String fieldName, String fieldValue) {
+		public WebPanel getPanel(CustomField cf, Student s) {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -126,13 +142,13 @@ public enum CustomFieldType{
 	OPTIONS {
 
 		@Override
-		public WebPanel getPanel(String fieldName, String fieldValue) {
+		public WebPanel getPanel(CustomField cf, Student s) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 	};
 	
-	public abstract WebPanel getPanel(String fieldDame, String fieldName);
+	public abstract WebPanel getPanel(CustomField cf, Student s);
 
 }
