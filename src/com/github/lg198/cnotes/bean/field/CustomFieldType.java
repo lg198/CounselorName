@@ -21,7 +21,7 @@ import com.alee.laf.panel.WebPanel;
 import com.alee.laf.text.WebTextField;
 import com.github.lg198.cnotes.bean.Student;
 
-public enum CustomFieldType{
+public enum CustomFieldType {
 
 	TEXT {
 
@@ -101,8 +101,12 @@ public enum CustomFieldType{
 					if (twidth > field.getWidth()) {
 						field.setSize(twidth + 10, field.getHeight());
 						if (field.getParent() != null) {
-							field.getParent().revalidate();
+							field.getParent().invalidate();
+							field.getParent().validate();
 							field.getParent().repaint();
+							field.invalidate();
+							field.validate();
+							field.repaint();
 						}
 					}
 				}

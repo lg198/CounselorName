@@ -35,6 +35,9 @@ public class CounselorNotesMain {
 		}
 		DatabaseManager.init("org.sqlite.JDBC", "jdbc:sqlite:" + folder.getPath() + File.separator + "cndb.db");
 		
+		DatabaseManager.createCustomField("Grade", CustomFieldType.TEXT);
+		
+		
 		System.out.println(DatabaseManager.countCustomFields());
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
