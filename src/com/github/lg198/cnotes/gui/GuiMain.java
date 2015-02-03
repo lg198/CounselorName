@@ -93,11 +93,10 @@ public class GuiMain {
 		wf.setVisible(true);
 
 		WebLookAndFeel.setDecorateDialogs(true);
-		loginDialog = new WebDialog(wf, Givens.fullName(),
-				Dialog.ModalityType.DOCUMENT_MODAL);
-		new GuiLogin(loginDialog);
+		loginDialog = new WebDialog(wf, Givens.fullName(), Dialog.ModalityType.DOCUMENT_MODAL);
+		new GuiSetup(loginDialog);
 		loginDialog.setVisible(true);
-		WebLookAndFeel.setDecorateDialogs(false);
+		WebLookAndFeel.setDecorateDialogs(false);		
 	}
 
 	@SuppressWarnings("unchecked")
