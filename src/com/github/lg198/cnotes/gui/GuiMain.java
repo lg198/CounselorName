@@ -10,6 +10,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.sql.SQLException;
@@ -23,8 +24,6 @@ import com.alee.extended.panel.GroupPanel;
 import com.alee.extended.panel.GroupingType;
 import com.alee.extended.tab.DocumentData;
 import com.alee.extended.tab.WebDocumentPane;
-import com.alee.extended.time.ClockType;
-import com.alee.extended.time.WebClock;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.filechooser.WebFileChooser;
@@ -39,11 +38,11 @@ import com.alee.laf.rootpane.WebFrame;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.splitpane.WebSplitPane;
 import com.alee.laf.text.WebTextField;
-import com.alee.managers.notification.NotificationIcon;
 import com.alee.managers.notification.NotificationManager;
 import com.alee.managers.notification.WebNotificationPopup;
 import com.alee.utils.swing.WebTimer;
 import com.github.lg198.cnotes.bean.Student;
+import com.github.lg198.cnotes.core.CounselorNotesMain;
 import com.github.lg198.cnotes.core.Givens;
 import com.github.lg198.cnotes.database.DatabaseManager;
 import com.github.lg198.cnotes.gui.util.IconLoader;
@@ -94,7 +93,11 @@ public class GuiMain {
 
 		WebLookAndFeel.setDecorateDialogs(true);
 		loginDialog = new WebDialog(wf, Givens.fullName(), Dialog.ModalityType.DOCUMENT_MODAL);
-		new GuiSetup(loginDialog);
+		if (!CounselorNotesMain.getPasswordFile().exists()) {
+			new GuiSetup(loginDialog);
+		} else {
+			new GuiLogin(loginDialog);
+		}
 		loginDialog.setVisible(true);
 		WebLookAndFeel.setDecorateDialogs(false);		
 	}
@@ -241,6 +244,10 @@ public class GuiMain {
 			}
 		});
 		fileMenu.add(importItem);
+		
+		WebMenuItem exportItem = new WebMenuItem("Export students as JSON");
+		
+		fileMenu.add(exportItem);
 		menuBar.add(fileMenu);
 	}
 

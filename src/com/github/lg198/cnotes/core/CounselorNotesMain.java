@@ -62,5 +62,9 @@ public class CounselorNotesMain {
 		
 
 	}
+	
+	public static File getPasswordFile() {
+		return new File(folder, "profile.glub");
+	}
 
 }
