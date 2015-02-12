@@ -28,7 +28,7 @@ public class CounselorNotesMain {
 		}else if (SystemUtils.isMac()) {
 			folder = new File(System.getProperty("user.home") + "/Library/Application Support/CounselorNotes");
 		}else {
-			folder = new File(System.getProperty("user.home") + "CounselorNotes");
+			folder = new File(System.getProperty("user.home") + ".CounselorNotes");
 		}
 		if (!folder.exists()) {
 			folder.mkdirs();

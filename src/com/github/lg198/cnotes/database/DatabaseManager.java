@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -93,6 +92,11 @@ public class DatabaseManager {
 			students.add(s);
 		}
 		return students;
+	}
+	
+	public static ResultSet getAllStudents() throws SQLException {
+		ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM student");
+		return rs;
 	}
 
 	public static Student addStudent(String fn, String ln) throws SQLException {

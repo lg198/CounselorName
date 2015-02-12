@@ -59,7 +59,6 @@ public class GuiSetup {
 		wd.pack();
 		wd.setLocationRelativeTo(null);
 		wd.setDefaultCloseOperation(WebDialog.DO_NOTHING_ON_CLOSE);
-		wd.setVisible(true);
 	}
 	
 	private WebLabel heading(String s) {

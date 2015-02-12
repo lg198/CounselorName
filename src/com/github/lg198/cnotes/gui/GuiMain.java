@@ -10,9 +10,9 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -245,7 +245,39 @@ public class GuiMain {
 		});
 		fileMenu.add(importItem);
 		
-		WebMenuItem exportItem = new WebMenuItem("Export students as JSON");
+		WebMenuItem exportItem = new WebMenuItem("Export students as JSON...");
+		exportItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				final WebFileChooser chooser = new WebFileChooser();
+				chooser.setMultiSelectionEnabled(false);
+				chooser.setAcceptAllFileFilterUsed(false);
+				chooser.addChoosableFileFilter(new FileNameExtensionFilter(
+						"JSON File", "json"));
+				if (chooser.showSaveDialog(wf) == WebFileChooser.APPROVE_OPTION) {
+					new Thread() {
+						@Override
+						public void run() {
+							try {
+								ResultSet rs = DatabaseManager.getAllStudents();
+								//TODO: LOOP THROUGH
+								final WebNotificationPopup notificationPopup = new WebNotificationPopup();
+								notificationPopup
+										.setIcon(IconLoader.getIcon("import_blue", 32));
+								notificationPopup.setDisplayTime(3000);
+
+								final WebLabel wl = new WebLabel("Import complete.");
+								notificationPopup.setContent(new GroupPanel(wl));
+
+								NotificationManager
+										.showNotification(notificationPopup);
+							} catch (FileNotFoundException e) {
+							}
+						}
+					}.start();
+				}
+			}
+		});
 		
 		fileMenu.add(exportItem);
 		menuBar.add(fileMenu);
