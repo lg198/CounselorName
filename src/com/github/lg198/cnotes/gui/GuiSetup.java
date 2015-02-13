@@ -47,7 +47,6 @@ public class GuiSetup {
 				if (pverifier.verify()) {
 					wd.dispose();
 					wd.setVisible(false);
-					System.out.println("VERIFIED");
 				}
 			}
 			
@@ -91,6 +90,9 @@ public class GuiSetup {
 			public VerificationResult verify(JComponent source) {
 				if (!new String(p1.getPassword()).equals(new String(p2.getPassword()))) {
 					return new VerificationResult(false, "The passwords must match!");
+				}
+				if (new String(p1.getPassword()).length() < 6) {
+					return new VerificationResult(false, "The password must be larger than 6 characters!");
 				}
 				return new VerificationResult(true);
 			}

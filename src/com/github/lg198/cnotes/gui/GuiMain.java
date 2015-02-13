@@ -10,8 +10,12 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -46,6 +50,7 @@ import com.github.lg198.cnotes.core.CounselorNotesMain;
 import com.github.lg198.cnotes.core.Givens;
 import com.github.lg198.cnotes.database.DatabaseManager;
 import com.github.lg198.cnotes.gui.util.IconLoader;
+import com.github.lg198.cnotes.util.JSONUtil;
 
 public class GuiMain {
 	private WebTextField searchField = new WebTextField();
@@ -259,19 +264,25 @@ public class GuiMain {
 						@Override
 						public void run() {
 							try {
-								ResultSet rs = DatabaseManager.getAllStudents();
-								//TODO: LOOP THROUGH
+								File f = chooser.getSelectedFile();
+								if (!f.getName().endsWith(".json")) {
+									f = new File(f.getParentFile(), f.getName() + ".json");
+								}
+								
+								JSONUtil.exportStudentsToFile(f);
+								
 								final WebNotificationPopup notificationPopup = new WebNotificationPopup();
 								notificationPopup
 										.setIcon(IconLoader.getIcon("import_blue", 32));
 								notificationPopup.setDisplayTime(3000);
 
-								final WebLabel wl = new WebLabel("Import complete.");
+								final WebLabel wl = new WebLabel("Export complete.");
 								notificationPopup.setContent(new GroupPanel(wl));
 
 								NotificationManager
 										.showNotification(notificationPopup);
-							} catch (FileNotFoundException e) {
+							} catch (SQLException e) {
+							} catch (IOException e) {
 							}
 						}
 					}.start();

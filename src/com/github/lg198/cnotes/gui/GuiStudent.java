@@ -8,10 +8,10 @@ import java.util.List;
 
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.separator.WebSeparator;
+import com.alee.laf.text.WebEditorPane;
 import com.esotericsoftware.tablelayout.swing.Table;
 import com.github.lg198.cnotes.bean.Student;
 import com.github.lg198.cnotes.bean.field.CustomField;
-import com.github.lg198.cnotes.bean.field.CustomFieldType;
 import com.github.lg198.cnotes.database.DatabaseManager;
 
 public class GuiStudent {
@@ -43,6 +43,10 @@ public class GuiStudent {
 				table.row();
 				table.addCell(new WebSeparator());
 			}
+			//table.row();
+			//WebEditorPane wep = new WebEditorPane();
+			//wep.setOpaque(false);
+			//table.addCell(wep);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
