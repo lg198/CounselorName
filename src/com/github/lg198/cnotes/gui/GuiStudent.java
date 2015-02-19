@@ -6,9 +6,10 @@ import java.awt.Component;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.alee.extended.panel.GroupPanel;
 import com.alee.laf.label.WebLabel;
+import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.separator.WebSeparator;
-import com.alee.laf.text.WebEditorPane;
 import com.esotericsoftware.tablelayout.swing.Table;
 import com.github.lg198.cnotes.bean.Student;
 import com.github.lg198.cnotes.bean.field.CustomField;
@@ -43,10 +44,12 @@ public class GuiStudent {
 				table.row();
 				table.addCell(new WebSeparator());
 			}
-			//table.row();
-			//WebEditorPane wep = new WebEditorPane();
+			table.row();
+			SuperEditorPane sep = new SuperEditorPane();
 			//wep.setOpaque(false);
-			//table.addCell(wep);
+			table.addCell(new GroupPanel(sep.getToolbar()));
+			table.row();
+			table.addCell(new WebScrollPane(sep.getPane())).fillX();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
