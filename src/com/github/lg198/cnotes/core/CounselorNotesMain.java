@@ -5,17 +5,12 @@ package com.github.lg198.cnotes.core;
 import java.io.File;
 import java.sql.SQLException;
 
-import com.alee.laf.WebLookAndFeel;
-import com.alee.managers.tooltip.TooltipManager;
-import com.alee.utils.SwingUtils;
 import com.alee.utils.SystemUtils;
-import com.github.lg198.cnotes.bean.field.CustomFieldType;
 import com.github.lg198.cnotes.database.DatabaseManager;
-import com.github.lg198.cnotes.gui.GuiMain;
+import com.github.lg198.cnotes.jfx.CNotesApplication;
 
 public class CounselorNotesMain {
 	
-	public static GuiMain gui;
 	public static File folder;
 
 	public static void main(String[] args) throws Exception {
@@ -44,20 +39,7 @@ public class CounselorNotesMain {
 				}
 			}
 		});
-		try {
-			SwingUtils.invokeAndWait(new Runnable() {
-				@Override
-				public void run() {
-					WebLookAndFeel.install();
-					TooltipManager.initialize();
-					gui = new GuiMain();
-				}
-			});
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+			
 
 	}
 	

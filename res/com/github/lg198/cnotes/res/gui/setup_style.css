@@ -1,0 +1,41 @@
+.lg-title {
+    -fx-font-size: 20px;
+}
+
+.root {
+    /* -fx-background-image: url("grey_wash_wall.png"); */
+}
+
+#maingrid {
+    -fx-background-color: linear-gradient(from 0% 0% to 0% 100%, rgba(180, 180, 180, 0.5) 0%, rgba(160, 160, 160, 0.5) 100%);
+    -fx-background-radius: 10px;
+   
+}
+
+.lg-close-button {
+    -fx-background-radius: 5em;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-background-color: darkgray;
+    -fx-border-color: aqua;
+    -fx-border-radius: 50px;
+    -fx-text-fill: orange;
+}
+
+.lg-close-button:hover {
+    -fx-border-color: cyan;
+    -fx-text-fill: #ff3300;
+    -fx-background-color: #666666;
+    -fx-cursor: hand;
+}
+
+.lg-close-button:pressed {
+    -fx-background-color: #333333;
+}
+
+.lg-toolbar {
+    -fx-padding: 5px;
+}
+
