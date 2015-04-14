@@ -113,10 +113,11 @@ public class MainScreen {
                             }
                         }
                         if (exists==null) {
-                            studentTabs.getTabs().add(generateTab(s));
-                        } else {
-                            studentTabs.getSelectionModel().select(exists);
+                            exists = generateTab(s);
+                            studentTabs.getTabs().add(exists);
                         }
+                        studentTabs.getSelectionModel().select(exists);
+
                     } catch (SQLException ex) {
                         new ExceptionAlert("Error", "Could not open student profile", "A database exception occurred and the specified student profile cannot be loaded", ex);
                     }

@@ -1,6 +1,5 @@
 package com.github.lg198.cnotes.jfx;
 
-import java.awt.Toolkit;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import javafx.scene.control.Alert;

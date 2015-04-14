@@ -15,7 +15,7 @@ public class CNotesApplication extends Application {
             new ExceptionAlert("Error on Startup", "Unable to start CounselorNotes", "CounselorNotes was unable to start due to a " + ex.getClass().getSimpleName() + ".", ex);
             return;
         }
-        new MainScreen().show(primaryStage);
+        new StartupScreen().show(primaryStage);
     }
 
     /**

@@ -1,8 +1,10 @@
 
 package com.github.lg198.cnotes.jfx;
 
+import com.github.lg198.cnotes.encryption.Encryption;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -11,6 +13,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -86,7 +90,7 @@ public class StartupScreen {
         plabel.getStyleClass().add("lg-label");
         GridPane.setHalignment(plabel, HPos.RIGHT);
         grid.add(plabel, 0, 1);
-        PasswordField pfield = new PasswordField();
+        final PasswordField pfield = new PasswordField();
         pfield.setStyle("-fx-font-size: 16px");
         grid.add(pfield, 1, 1);
 
@@ -96,7 +100,7 @@ public class StartupScreen {
         pclabel.getStyleClass().add("lg-label");
         GridPane.setHalignment(pclabel, HPos.RIGHT);
         grid.add(pclabel, 0, 2);
-        PasswordField pcfield = new PasswordField();
+        final PasswordField pcfield = new PasswordField();
         GridPane.setMargin(pcfield, new Insets(0, 0, 16, 0));
         GridPane.setMargin(pclabel, new Insets(0, 0, 16, 0));
         pcfield.setStyle("-fx-font-size: 16px");
@@ -119,6 +123,22 @@ public class StartupScreen {
         HBox bbox = new HBox();
         Button submit = new Button("Submit");
         submit.setStyle("-fx-font-size: 14px; -fx-cursor: hand;");
+        submit.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                if (!pfield.getText().equals(pcfield.getText())) {
+                    Alert a = new Alert(AlertType.WARNING);
+                    a.setTitle("");
+                    a.setHeaderText("Cannot create profile");
+                    a.setContentText("The passwords do not match!");
+                    a.showAndWait();
+                } else {
+                    Encryption.init(pfield.getText());
+                }
+            }
+            
+        });
         bbox.setAlignment(Pos.CENTER_RIGHT);
         bbox.getChildren().add(submit);
         grid.add(bbox, 0, 4, 2, 1);
