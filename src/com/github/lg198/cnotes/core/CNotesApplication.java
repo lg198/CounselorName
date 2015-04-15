@@ -1,8 +1,8 @@
-package com.github.lg198.cnotes.jfx;
+package com.github.lg198.cnotes.core;
 
-import com.github.lg198.cnotes.core.CounselorNotesMain;
+import com.github.lg198.cnotes.jfx.ExceptionAlert;
+import com.github.lg198.cnotes.jfx.MainScreen;
 import javafx.application.Application;
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
 public class CNotesApplication extends Application {
@@ -15,7 +15,16 @@ public class CNotesApplication extends Application {
             new ExceptionAlert("Error on Startup", "Unable to start CounselorNotes", "CounselorNotes was unable to start due to a " + ex.getClass().getSimpleName() + ".", ex);
             return;
         }
-        new StartupScreen().show(primaryStage);
+        
+        /*
+        if (!CounselorNotesMain.getPasswordFile().exists()) {
+            new StartupScreen().show(primaryStage);
+        } else {
+            new LoginScreen().show(primaryStage);
+        }
+        */
+        
+        new MainScreen().show(primaryStage);
     }
 
     /**

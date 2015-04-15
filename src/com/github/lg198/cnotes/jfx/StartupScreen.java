@@ -1,7 +1,12 @@
 
 package com.github.lg198.cnotes.jfx;
 
+import com.github.lg198.cnotes.core.CNotesApplication;
+import com.github.lg198.cnotes.core.CounselorNotesMain;
 import com.github.lg198.cnotes.encryption.Encryption;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -133,8 +138,20 @@ public class StartupScreen {
                     a.setHeaderText("Cannot create profile");
                     a.setContentText("The passwords do not match!");
                     a.showAndWait();
-                } else {
-                    Encryption.init(pfield.getText());
+                    return;
+                }
+                if (pfield.getText().isEmpty()) {
+                    Alert a = new Alert(AlertType.WARNING);
+                    a.setTitle("");
+                    a.setHeaderText("Cannot create profile");
+                    a.setContentText("The passwords may not be blank!");
+                    a.showAndWait();
+                    return;
+                }
+                try {
+                    Encryption.init(pfield.getText(), CounselorNotesMain.getPasswordFile());
+                } catch (IOException ex) {
+                    new ExceptionAlert("Error", "Unable to save password...", "CounselorNotes was unable to save your password profile.", ex);
                 }
             }
             

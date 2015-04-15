@@ -1,5 +1,6 @@
 package com.github.lg198.cnotes.jfx;
 
+import com.github.lg198.cnotes.core.CNotesApplication;
 import com.github.lg198.cnotes.bean.Student;
 import com.github.lg198.cnotes.database.DatabaseManager;
 import java.sql.SQLException;
@@ -8,13 +9,18 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -26,10 +32,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import javax.swing.SingleSelectionModel;
 
 /**
  *
@@ -40,13 +46,16 @@ public class MainScreen {
     private TextField searchField = new TextField();
     private ListView<String> studentList;
     private TabPane studentTabs = new TabPane();
-    
+
     private static Image I_STUDENT = new Image("/com/github/lg198/cnotes/res/gui/student_blue.png", 16, 16, false, true);
 
     public void show(Stage stage) {
         BorderPane root = new BorderPane();
         SplitPane split = createSplitPane();
         root.setCenter(split);
+
+        MenuBar mb = createMenuBar();
+        root.setTop(mb);
 
         VBox searchArea = createSearchArea();
         split.getItems().add(searchArea);
@@ -96,7 +105,7 @@ public class MainScreen {
                 }
             }
         });
-        
+
         studentList.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
@@ -112,7 +121,7 @@ public class MainScreen {
                                 exists = t;
                             }
                         }
-                        if (exists==null) {
+                        if (exists == null) {
                             exists = generateTab(s);
                             studentTabs.getTabs().add(exists);
                         }
@@ -123,9 +132,9 @@ public class MainScreen {
                     }
                 }
             }
-            
+
         });
-        
+
         HBox addrem = new HBox();
         addrem.setAlignment(Pos.CENTER_RIGHT);
         Button addStudent = new Button("+");
@@ -139,7 +148,7 @@ public class MainScreen {
         addStudent.setFont(buttonFont);
         remStudent.setFont(buttonFont);
         addrem.getChildren().addAll(addStudent, remStudent);
-        
+
         vb.getChildren().add(addrem);
 
         vb.setMaxWidth(250);
@@ -147,12 +156,33 @@ public class MainScreen {
 
         return vb;
     }
-    
+
     private Tab generateTab(Student s) {
         Tab t = new Tab(s.getNamePretty());
         t.setGraphic(new ImageView(I_STUDENT));
         //t.setContent(Node n);
         return t;
+    }
+
+    public MenuBar createMenuBar() {
+        MenuBar mb = new MenuBar();
+        Menu file = new Menu("File");
+        MenuItem importItem = new Menu("Import...");
+        importItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                
+            }
+        });
+        Canvas c = new Canvas(16, 16);
+        c.getGraphicsContext2D().setFill(Color.BLUE);
+        c.getGraphicsContext2D().fillRect(0, 0, 16, 16);
+        c.getGraphicsContext2D().setFill(Color.WHITE);
+        c.getGraphicsContext2D().fillRect(5, y, w, h);
+        importItem.setGraphic(c);
+        file.getItems().addAll(importItem);
+
+        mb.getMenus().addAll(file);
+        return mb;
     }
 
 }
