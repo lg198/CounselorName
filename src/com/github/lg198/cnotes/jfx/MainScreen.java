@@ -11,10 +11,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -29,12 +30,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 /**
@@ -47,14 +49,16 @@ public class MainScreen {
     private ListView<String> studentList;
     private TabPane studentTabs = new TabPane();
 
-    private static Image I_STUDENT = new Image("/com/github/lg198/cnotes/res/gui/student_blue.png", 16, 16, false, true);
+    private static Image I_STUDENT = new Image("/com/github/lg198/cnotes/res/icons/student_blue.png", 16, 16, false, true);
+    private static Image I_IMPORT  = new Image("/com/github/lg198/cnotes/res/icons/import_blue.png", 16, 16, false, true);
+    private static Image I_SEARCH  = new Image("/com/github/lg198/cnotes/res/icons/search_blue.png", 16, 16, false, true);
 
     public void show(Stage stage) {
         BorderPane root = new BorderPane();
         SplitPane split = createSplitPane();
         root.setCenter(split);
 
-        MenuBar mb = createMenuBar();
+        MenuBar mb = createMenuBar(stage);
         root.setTop(mb);
 
         VBox searchArea = createSearchArea();
@@ -62,7 +66,7 @@ public class MainScreen {
 
         split.getItems().add(studentTabs);
 
-        Scene scene = new Scene(root, 800, 500);
+        Scene scene = new Scene(root, 1000, 680);
         scene.getStylesheets().add(CNotesApplication.class.getResource("/com/github/lg198/cnotes/res/gui/main_style.css").toExternalForm());
 
         stage.setScene(scene);
@@ -80,9 +84,15 @@ public class MainScreen {
         VBox vb = new VBox();
         vb.setAlignment(Pos.CENTER);
 
+        HBox sfbox = new HBox();
         searchField.setStyle("-fx-background-radius: 5px;");
         searchField.setPromptText("Search Students");
-        vb.getChildren().add(searchField);
+        ImageView iv = new ImageView(I_SEARCH);
+        sfbox.setAlignment(Pos.CENTER);
+        sfbox.getChildren().addAll(iv, searchField);
+        HBox.setHgrow(searchField, Priority.ALWAYS);
+        HBox.setMargin(iv, new Insets(0, 3, 0, 3));
+        vb.getChildren().add(sfbox);
 
         studentList = new ListView<String>();
         ObservableList<String> items = FXCollections.observableArrayList();
@@ -164,25 +174,67 @@ public class MainScreen {
         return t;
     }
 
-    public MenuBar createMenuBar() {
-        MenuBar mb = new MenuBar();
-        Menu file = new Menu("File");
-        MenuItem importItem = new Menu("Import...");
+    private MenuBar createMenuBar(final Stage stage) {
+        final MenuBar mb = new MenuBar();
+        final Menu file = new Menu("File");
+        MenuItem importItem = new MenuItem("Import...");
         importItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
-                
+                Popup p = createImportPopup();
+                p.show(stage);
+                file.hide();
             }
         });
+        /*
         Canvas c = new Canvas(16, 16);
         c.getGraphicsContext2D().setFill(Color.BLUE);
         c.getGraphicsContext2D().fillRect(0, 0, 16, 16);
         c.getGraphicsContext2D().setFill(Color.WHITE);
-        c.getGraphicsContext2D().fillRect(5, y, w, h);
+        c.getGraphicsContext2D().fillRect(6, 2, 4, 7);
+        c.getGraphicsContext2D().fillPolygon(new double[]{3d, 13d, 8d}, new double[]{8d, 8d, 14d}, 3);
         importItem.setGraphic(c);
+        */
+        importItem.setGraphic(new ImageView(I_IMPORT));
         file.getItems().addAll(importItem);
 
         mb.getMenus().addAll(file);
         return mb;
+    }
+    
+    private Popup createImportPopup() {
+        Popup pop = new Popup();
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: cornsilk");
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(10));
+        grid.setAlignment(Pos.CENTER);
+        grid.setVgap(10);
+        grid.setHgap(5);
+        root.setCenter(grid);
+        
+        Label l = new Label("Import students from text file");
+        l.setStyle("-fx-font-size: 18px");
+        GridPane.setHalignment(l, HPos.RIGHT);
+        GridPane.setValignment(l, VPos.CENTER);
+        GridPane.setColumnSpan(l, 3);
+        GridPane.setMargin(l, new Insets(0, 0, 10, 5));
+        grid.add(l, 0, 0);
+        
+        Label l1 = new Label("Path: ");
+        l1.setStyle("-fx-font-size: 14px");
+        grid.add(l1, 0, 1);
+        
+        final TextField pathField = new TextField();
+        pathField.setStyle("-fx-font-size: 14px");
+        grid.add(pathField, 1, 1);
+        
+        final Button browseButton = new Button("Browse");
+        browseButton.setStyle("-fx-font-size: 14px");
+        grid.add(browseButton, 2, 1);
+        
+        pop.getContent().add(root);
+        
+        return pop;
     }
 
 }
