@@ -172,7 +172,8 @@ public class MainScreen {
     private Tab generateTab(Student s) {
         Tab t = new Tab(s.getNamePretty());
         t.setGraphic(new ImageView(I_STUDENT));
-        //t.setContent(Node n);
+        StudentProfile sp = new StudentProfile(s);
+        t.setContent(sp.build());
         return t;
     }
 
