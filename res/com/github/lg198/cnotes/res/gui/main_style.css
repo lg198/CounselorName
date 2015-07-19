@@ -6,3 +6,19 @@
 #remStudent {
     -fx-text-fill: #ff0000;
 }
+
+.lrg-ibutton {
+    -fx-background-color: #F5F5F5;
+}
+
+.lrg-ibutton:hover {
+    -fx-background-color: linear-gradient(to bottom, #F5F5F5, #DCDCDC);
+}
+
+.lrg-ibutton:pressed {
+    -fx-background-color: linear-gradient( to bottom, #DCDCDC, #CDCDCD);
+}
+
+.split-pane-divider {
+    -fx-cursor: default;
+}

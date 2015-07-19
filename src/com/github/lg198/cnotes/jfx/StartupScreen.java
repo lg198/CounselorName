@@ -1,80 +1,38 @@
-
 package com.github.lg198.cnotes.jfx;
 
-import com.github.lg198.cnotes.core.CNotesApplication;
+import com.github.lg198.cnotes.backup.BackupFrequency;
 import com.github.lg198.cnotes.core.CounselorNotesMain;
+import com.github.lg198.cnotes.core.Settings;
 import com.github.lg198.cnotes.encryption.Encryption;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.image.Image;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author lg198
  */
 public class StartupScreen {
-    
+
     public void show(Stage stage) {
-        stage.initStyle(StageStyle.TRANSPARENT);
 
-        Font titleFont = Font.loadFont(CNotesApplication.class.getResource("/com/github/lg198/cnotes/res/gui/Roboto-Regular.ttf").toExternalForm(), 20);
-
-        StackPane sp = new StackPane();
-
-        BorderPane bp = new BorderPane();
-
-        FlowPane fp = new FlowPane();
-        fp.setAlignment(Pos.CENTER);
-
-        HBox toolbar = new HBox();
-        toolbar.getStyleClass().add("lg-toolbar");
-        toolbar.setAlignment(Pos.CENTER_RIGHT);
-
-        Button b = new Button("X");
-        b.setOnAction(new EventHandler() {
-
-            @Override
-            public void handle(Event event) {
-                Platform.exit();
-            }
-
-        });
-        b.getStyleClass().add("lg-close-button");
-        toolbar.getChildren().add(b);
-
-        bp.setCenter(fp);
-        bp.setTop(toolbar);
 
         GridPane grid = new GridPane();
         //grid.setAlignment(Pos.CENTER);
@@ -83,51 +41,48 @@ public class StartupScreen {
         grid.setVgap(16);
         grid.setHgap(10);
 
-        Text hwtext = new Text("Welcome!");
-        hwtext.getStyleClass().add("lg-title");
-        hwtext.setFont(titleFont);
-        GridPane.setMargin(hwtext, new Insets(0, 0, 16, 0));
-        GridPane.setHalignment(hwtext, HPos.CENTER);
-        GridPane.setColumnSpan(hwtext, 2);
-        grid.add(hwtext, 0, 0);
-
         Label plabel = new Label("Password:");
         plabel.getStyleClass().add("lg-label");
         GridPane.setHalignment(plabel, HPos.RIGHT);
-        grid.add(plabel, 0, 1);
+        grid.add(plabel, 0, 0);
         final PasswordField pfield = new PasswordField();
-        pfield.setStyle("-fx-font-size: 16px");
-        grid.add(pfield, 1, 1);
+        //pfield.setStyle("-fx-font-size: 16px");
+        grid.add(pfield, 1, 0);
 
         grid.setVgap(5);
 
         Label pclabel = new Label("Confirm Password:");
         pclabel.getStyleClass().add("lg-label");
         GridPane.setHalignment(pclabel, HPos.RIGHT);
-        grid.add(pclabel, 0, 2);
+        grid.add(pclabel, 0, 1);
         final PasswordField pcfield = new PasswordField();
         GridPane.setMargin(pcfield, new Insets(0, 0, 16, 0));
         GridPane.setMargin(pclabel, new Insets(0, 0, 16, 0));
-        pcfield.setStyle("-fx-font-size: 16px");
-        grid.add(pcfield, 1, 2);
+        //pcfield.setStyle("-fx-font-size: 16px");
+        grid.add(pcfield, 1, 1);
 
         Label blabel = new Label("Backup Schedule:");
         blabel.getStyleClass().add("lg-label");
         GridPane.setHalignment(blabel, HPos.RIGHT);
-        grid.add(blabel, 0, 3);
-        ChoiceBox cb = new ChoiceBox(FXCollections.observableArrayList(
-            "Every hour", "Every 12 hours", "Every day", "Every other day", "Every 5 days", "Every week", "Every month"
-        ));
-        cb.setStyle("-fx-font-size: 16px");
-        cb.setMaxWidth(Double.MAX_VALUE);
-        cb.setValue("Every day");
-        GridPane.setMargin(cb, new Insets(0, 0, 16, 0));
+        grid.add(blabel, 0, 2);
+        String[] options = new String[BackupFrequency.values().length];
+        for (int i = 0; i < options.length; i++) {
+            options[i] = Arrays.stream(BackupFrequency.values()[i].name().toLowerCase().split("_"))
+                               .map(s -> s.substring(0, 1).toUpperCase() + s.substring(1, s.length()))
+                               .collect(Collectors.joining(" "));
+        }
+        final ChoiceBox backupChoices = new ChoiceBox(FXCollections.observableArrayList(options));
+        //cb.setStyle("-fx-font-size: 16px");
+        backupChoices.setMaxWidth(Double.MAX_VALUE);
+        backupChoices.getSelectionModel().select(BackupFrequency.defaultFrequency());
+        GridPane.setMargin(backupChoices, new Insets(0, 0, 16, 0));
         GridPane.setMargin(blabel, new Insets(0, 0, 16, 0));
-        grid.add(cb, 1, 3);
-        
+        grid.add(backupChoices, 1, 2);
+
         HBox bbox = new HBox();
+        bbox.setSpacing(6);
         Button submit = new Button("Submit");
-        submit.setStyle("-fx-font-size: 14px; -fx-cursor: hand;");
+        submit.setStyle("-fx-cursor: hand;");
         submit.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -148,39 +103,48 @@ public class StartupScreen {
                     a.showAndWait();
                     return;
                 }
+
+                Settings.setBackupFrequency(BackupFrequency.values()[backupChoices.getSelectionModel().getSelectedIndex()]);
+
                 try {
-                    Encryption.init(pfield.getText(), CounselorNotesMain.getPasswordFile());
-                } catch (IOException ex) {
+                    Platform.setImplicitExit(false);
+                    stage.hide();
+                    Encryption.init(new String(pfield.getText()));
+                    Stage primary = new Stage();
+                    MainScreen ms = new MainScreen();
+                    ms.show(primary);
+                    Platform.setImplicitExit(true);
+                } catch (SQLException ex) {
                     new ExceptionAlert("Error", "Unable to save password...", "CounselorNotes was unable to save your password profile.", ex);
                 }
             }
-            
+
+        });
+        Button cancel = new Button("Cancel");
+        cancel.setOnAction(event -> {
+            FadeTransition ft = new FadeTransition();
+            ft.setNode(grid);
+            ft.setFromValue(1);
+            ft.setToValue(0);
+            ft.setDuration(Duration.seconds(0.5));
+            ft.setOnFinished(evt -> Platform.exit());
+            ft.playFromStart();
         });
         bbox.setAlignment(Pos.CENTER_RIGHT);
-        bbox.getChildren().add(submit);
-        grid.add(bbox, 0, 4, 2, 1);
+        bbox.getChildren().addAll(cancel, submit);
+        grid.add(bbox, 0, 3, 2, 1);
 
-        fp.getChildren().add(grid);
-
-        Canvas c = new Canvas(400, 500);
-        GraphicsContext gc = c.getGraphicsContext2D();
-        gc.save();
-        gc.drawImage(new Image(CNotesApplication.class.getResource("/com/github/lg198/cnotes/res/gui/grey_wash_wall.png").toExternalForm()), 0, 0, c.getWidth(), c.getHeight());
-        gc.setFill(new LinearGradient(0, 0, 0, 1, true, CycleMethod.NO_CYCLE, new Stop[]{new Stop(0, Color.rgb(200, 200, 200, 0.5)), new Stop(1, Color.rgb(10, 10, 10, 0.5))}));
-        gc.fillRect(0, 0, c.getWidth(), c.getHeight());
-        gc.restore();
-
-        sp.getChildren().addAll(c, bp);
-
-        Scene scene = new Scene(sp, 400, 500);
-
-        scene.getStylesheets().add(CNotesApplication.class.getResource("/com/github/lg198/cnotes/res/gui/setup_style.css").toExternalForm());
+        Scene scene = new Scene(grid);
+        scene.setFill(null);
 
         stage.setScene(scene);
-        
+        stage.setTitle("Create Counselor Profile");
+        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.sizeToScene();
+
         if (!stage.isShowing()) {
             stage.show();
         }
     }
-    
+
 }

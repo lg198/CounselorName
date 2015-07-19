@@ -2,11 +2,11 @@
 //Date created: Jan 23, 2015
 package com.github.lg198.cnotes.core;
 
-import java.io.File;
-import java.sql.SQLException;
-
 import com.alee.utils.SystemUtils;
 import com.github.lg198.cnotes.database.DatabaseManager;
+
+import java.io.File;
+import java.sql.SQLException;
 
 public class CounselorNotesMain {
 
@@ -39,10 +39,13 @@ public class CounselorNotesMain {
             }
         });
 
+        Settings.load();
+
     }
 
-    public static File getPasswordFile() {
+    /*public static File getPasswordFile() {
         return new File(folder, "profile.glub");
-    }
+    }*/
+    public static File getSettingsFile() { return new File(folder, "settings.properties"); }
 
 }
