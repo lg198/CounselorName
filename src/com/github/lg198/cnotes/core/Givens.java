@@ -2,8 +2,6 @@
 //Date created: Jan 25, 2015
 package com.github.lg198.cnotes.core;
 
-import com.alee.laf.optionpane.WebOptionPane;
-
 import java.util.Properties;
 
 public class Givens {
@@ -15,7 +13,6 @@ public class Givens {
         try {
             props.load(Givens.class.getResourceAsStream("/com/github/lg198/cnotes/res/givens.properties"));
         } catch (Exception e) {
-            WebOptionPane.showMessageDialog(null, "Could not start application: Missing properties file!", "Error", WebOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
     }
