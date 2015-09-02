@@ -133,3 +133,9 @@
   -fx-text-fill: red;
   -fx-font-size: 20px;
 }
+
+
+.lrg-button {
+  -fx-background-color: derive(#73C1BB, -10%);
+  -fx-text-fill: #02478E;
+}

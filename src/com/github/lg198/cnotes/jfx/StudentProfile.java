@@ -6,9 +6,11 @@ import com.github.lg198.cnotes.bean.field.CustomField;
 import com.github.lg198.cnotes.database.DatabaseManager;
 import com.github.lg198.cnotes.util.GridBuilder;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
@@ -54,9 +56,16 @@ public class StudentProfile {
         VBox vbox = new VBox();
         vbox.setPadding(new Insets(20));
 
+        HBox titleBox = new HBox();
         Label infoTitle = new Label("Student Information");
         infoTitle.getStyleClass().add("lg-profile-header");
-        vbox.getChildren().add(infoTitle);
+        titleBox.getChildren().add(infoTitle);
+        Button editButton = new Button("Edit Information");
+        editButton.getStyleClass().add("lrg-button");
+        titleBox.getChildren().add(editButton);
+        titleBox.setSpacing(20);
+        titleBox.setAlignment(Pos.CENTER_LEFT);
+        vbox.getChildren().add(titleBox);
 
         GridPane fieldPane = createStudentInfo(customFields);
         vbox.getChildren().add(fieldPane);
@@ -78,6 +87,10 @@ public class StudentProfile {
     private GridPane createStudentInfo(List<CustomField> customFields) {
         GridBuilder gb = new GridBuilder();
         gb.hgap(6);
+        if (customFields.isEmpty()) {
+            gb.add(new Label("No information could be found for this student.")).marginTop(10);
+            return gb.build();
+        }
         for (CustomField cf : customFields) {
             createCustomFieldPresentation(gb, cf);
         }
