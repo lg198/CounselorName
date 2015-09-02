@@ -1,0 +1,135 @@
+.lg-menu-box {
+  -fx-background-color: #166EC9;
+  -fx-padding: 3px;
+}
+
+.lg-menu-box .button {
+  -fx-text-fill: white;
+  -fx-font-size: 14px;
+  -fx-background-color: null;
+  -fx-background-radius: 0px;
+}
+
+.lg-menu-box .button .lg-glyph {
+  -fx-font-family: FontAwesome;
+  -fx-text-fill: blue;
+  -fx-font-size: 20px;
+}
+
+.lg-menu-box #settings-button .lg-glyph {
+  -fx-text-fill: black;
+}
+
+.lg-menu-box .close-button .lg-glyph {
+  -fx-text-fill: blue;
+  -fx-font-size: 20px;
+}
+
+.lg-menu-box .button:hover {
+  -fx-background-color: #7DA1C7;
+}
+
+.lg-menu-box .button:pressed {
+  -fx-background-color: #868DCD;
+}
+
+.lg-menu-box .label {
+  -fx-text-fill: white;
+  -fx-font-size: 15px;
+}
+
+/*
+.menu, .menu-item, .context-menu * {
+  -fx-text-fill: white;
+  -fx-font-size: 13px;
+  -fx-background-color: #4380BE;
+  -fx-background-insets: 0px;
+}
+
+.menu-item:hover, .menu-item:hover * {
+  -fx-background-color: #7DA1C7;
+}
+*/
+
+.lg-tool-box {
+  -fx-background-color: #4380BE;
+}
+.lg-tool-box-button {
+  -fx-background-color: null;
+  -fx-background-radius: 0px;
+}
+.lg-tool-box-button:hover {
+  -fx-background-color: linear-gradient(to bottom, derive(#4380BE, 20%), #4380BE);
+}
+
+
+.tab-pane {
+  -fx-background-color: #73C1BB;
+}
+
+.tab-header-background {
+  -fx-background-color: #02478E;
+}
+
+.split-pane-divider {
+  -fx-background-color: #02478E;
+}
+
+.list-view {
+  -fx-background-color: #73C1BB;
+}
+
+.list-cell {
+  -fx-text-fill: white;
+}
+
+.list-cell:selected, .list-cell:even:selected, .list-cell:odd:selected {
+  -fx-background-color: linear-gradient(#2333CF 0%, #2333CF 70%, derive(#2333CF, -30%) 100%);
+}
+
+.list-cell:even {
+  -fx-background-color: #73C1BB;
+}
+
+.list-cell:odd {
+  -fx-background-color: derive(#73C1BB, -10%);
+}
+
+/*
+.choice-box {
+  -fx-background-color: linear-gradient(#73C1BB 0%, #73C1BB 70%, #7DA1C7 100%);
+}
+
+.choice-box:hover {
+  -fx-background-color: derive(#73C1BB, 20%);
+}
+*/
+
+.lg-tab-placeholder {
+  -fx-text-fill: #051397;
+}
+
+.lg-tab-placeholder-title {
+  -fx-font-weight: bold;
+  -fx-font-size: 40px;
+}
+
+.lg-tab-placeholder-subtitle {
+  -fx-text-fill: #02478E;
+  -fx-font-style: italic;
+  -fx-font-size: 15px;
+}
+
+.lg-profile-header {
+  -fx-font-size: 30px;
+  -fx-text-fill: #02478E;
+}
+
+.lg-overlay-sides {
+  -fx-background-color: #166EC9;
+}
+
+.lg-warning-label {
+  -fx-text-fill: red;
+  -fx-font-size: 20px;
+}
