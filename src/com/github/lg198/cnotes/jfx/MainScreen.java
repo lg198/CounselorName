@@ -278,9 +278,14 @@ public class MainScreen {
         gb.add(spaceRect).hgrow(Priority.ALWAYS);
 
         Button settings = new Button(null, ResourceManager.generateGlyph(FontAwesome.Glyph.GEAR.getChar(), 25, Color.BLACK));
+        settings.setOnAction(event -> Platform.runLater(() -> {
+            overlay.showOverlayFade(new SettingsScreen().build(), Duration.seconds(0.5));
+        }));
         settings.setId("settings-button");
         settings.applyCss();
-        gb.add(settings).halign(HPos.RIGHT);
+        gb.add(settings).
+
+                halign(HPos.RIGHT);
 
         return gb.build();
     }

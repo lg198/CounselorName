@@ -22,7 +22,7 @@ public class CounselorNotesMain {
         } else if (SystemUtil.isMac()) {
             folder = new File(System.getProperty("user.home") + "/Library/Application Support/CounselorNotes");
         } else {
-            folder = new File(System.getProperty("user.home") + ".CounselorNotes");
+            folder = new File(System.getProperty("user.home") + "/.config/CounselorNotes");
         }
         if (!folder.exists()) {
             folder.mkdirs();
@@ -39,7 +39,7 @@ public class CounselorNotesMain {
             }
         });
 
-        //Settings.load();
+        Settings.load();
 
     }
 

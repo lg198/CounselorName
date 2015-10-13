@@ -41,6 +41,8 @@ public class ExceptionAlert {
 
         alert.getDialogPane().setExpandableContent(expContent);
 
+        alert.setResizable(true);
+
         alert.showAndWait();
     }
 
