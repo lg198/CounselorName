@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class CustomFieldPanel {
@@ -27,7 +28,7 @@ public class CustomFieldPanel {
         VBox.setVgrow(list, Priority.ALWAYS);
 
         box.getChildren().add(listBox);
-        VBox.setVgrow(listBox, Priority.ALWAYS);
+        VBox.setVgrow(listBox, Priority.SOMETIMES);
 
         return box;
     }

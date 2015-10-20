@@ -30,7 +30,7 @@ public class DatabaseManager {
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
             throw new DatabaseNotFoundException("The driver '" + driver
-                                                        + "' was not found on the classpath!", e);
+                    + "' was not found on the classpath!", e);
         }
 
         try {
@@ -88,7 +88,7 @@ public class DatabaseManager {
         List<Student> students = new ArrayList<Student>();
         while (rs.next()) {
             Student s = new Student(rs.getString("id"),
-                                    rs.getString("firstname"), rs.getString("lastname"));
+                    rs.getString("firstname"), rs.getString("lastname"));
             students.add(s);
         }
         return students;
@@ -144,15 +144,15 @@ public class DatabaseManager {
         ResultSet rs = execq("SELECT * FROM fieldDef");
         while (rs.next()) {
             ResultSet rs1 = execq("SELECT * FROM customField WHERE fieldId = \"" + rs.getString("id")
-                                          + "\" AND student = \"" + s.getId() + "\"");
+                    + "\" AND student = \"" + s.getId() + "\"");
             if (rs1.next()) {
                 fields.add(new CustomField(rs.getString("id"), rs.getString("name"),
-                                           rs1.getString("fieldValue"), CustomFieldType.valueOf(rs.getString("fieldType"))));
+                        rs1.getString("fieldValue"), CustomFieldType.valueOf(rs.getString("fieldType"))));
             } else {
                 CustomFieldType cft = CustomFieldType.valueOf(rs.getString("fieldType"));
                 String dv = cft.getPresentableDefault(rs.getString("defaultValue"));
                 fields.add(new CustomField(rs.getString("id"), rs.getString("name"),
-                                           dv, cft));
+                        dv, cft));
                 execf("INSERT INTO customField VALUES (\"%s\", \"%s\", \"%s\")", rs.getString("id"), s.getId(), dv);
             }
             rs1.close();
@@ -161,10 +161,34 @@ public class DatabaseManager {
         return fields;
     }
 
+    public static CustomField getDefaultCustomField(String id) throws SQLException {
+        PreparedStatement ps = prep("SELECT * FROM fieldDef WHERE fieldId = ?");
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            CustomField f = new CustomField(
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("defaultValue"),
+                    CustomFieldType.valueOf(rs.getString("fieldType"))
+            );
+            return f;
+        } else {
+            throw new SQLException("Nonexistent id " + id);
+        }
+    }
+
     public static String getDefaultCustomFieldValue(String id) throws SQLException {
         ResultSet rs = execq("SELECT * FROM fieldDef WHERE id = \"" + id + "\"");
         rs.next();
         return rs.getString("defaultValue");
+    }
+
+    public static void setDefaultCustfomFieldValue(String id, String value) throws SQLException {
+        PreparedStatement statement = prep("INSERT or REPLACE INTO customField (id, defaultValue) VALUES (?, ?)");
+        statement.setString(1, id);
+        statement.setString(2, value);
+        statement.execute();
     }
 
     public static List<CustomField> getDefaultCustomFields() throws SQLException {
@@ -174,7 +198,7 @@ public class DatabaseManager {
             CustomFieldType cft = CustomFieldType.valueOf(rs.getString("fieldType"));
             String dv = cft.getPresentableDefault(rs.getString("defaultValue"));
             fields.add(new CustomField(rs.getString("id"), rs.getString("name"),
-                                       dv, cft));
+                    dv, cft));
         }
         return fields;
     }
