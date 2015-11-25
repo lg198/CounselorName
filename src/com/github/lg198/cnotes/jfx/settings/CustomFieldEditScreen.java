@@ -36,6 +36,7 @@ public class CustomFieldEditScreen {
             current = cf;
             box.getChildren().remove(editable);
             editable = cf.getType().buildEditDefaultRegion(cf.getValue(), this::acceptUpdate);
+            box.getChildren().add(editable);
         } catch (SQLException e) {
             e.printStackTrace();
             //todo: show error at bottom of screen

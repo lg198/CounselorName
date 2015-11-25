@@ -60,6 +60,7 @@
 }
 .lg-tool-box-button:hover {
   -fx-background-color: linear-gradient(to bottom, derive(#4380BE, 20%), #4380BE);
+  -fx-cursor: hand;
 }
 
 
