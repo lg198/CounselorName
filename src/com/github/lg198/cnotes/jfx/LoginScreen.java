@@ -16,8 +16,10 @@ import java.awt.*;
 public class LoginScreen {
 
     public PasswordField pfield = new PasswordField();
+    private Runnable finished;
 
-    public LoginScreen() {
+    public LoginScreen(Runnable r) {
+        finished = r;
     }
 
     public BorderPane build(final OverlayStackPane overlay) {
@@ -35,6 +37,7 @@ public class LoginScreen {
         enter.setOnAction(evt -> {
             if (Encryption.get().checkPassword(pfield.getText())) {
                 overlay.hideOverlayFade(Duration.seconds(0.5));
+                Platform.runLater(finished);
             } else {
                 pfield.setStyle("-fx-focus-color: red; -fx-font-size: 14px");
                 pfield.getProperties().put("incorrectPassword", "");
@@ -86,6 +89,8 @@ public class LoginScreen {
         bp.setCenter(vb);
 
         bp.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE, null, null)));
+
+        bp.requestFocus();
 
         return bp;
     }

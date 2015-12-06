@@ -92,7 +92,7 @@ public class MainScreen {
 
         overlay.getChildren().addAll(root);
 
-        LoginScreen loginScreen = new LoginScreen();
+        LoginScreen loginScreen = new LoginScreen(() -> root.setDisable(false));
         BorderPane login = loginScreen.build(overlay);
         overlay.showOverlay(login);
         login.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
@@ -100,16 +100,18 @@ public class MainScreen {
         });
 
         Scene scene = new Scene(overlay, 1000, 680);
-        scene.getStylesheets().add(CNotesApplication.class.getResource("/com/github/lg198/cnotes/res/gui/main_style.css").toExternalForm());
-        scene.getStylesheets().add(CNotesApplication.class.getResource("/com/github/lg198/cnotes/res/gui/blueStyle.css").toExternalForm());
+        scene.getStylesheets().add(ResourceManager.getStylesheet("main_style"));
+        scene.getStylesheets().add(ResourceManager.getStylesheet("blueStyle"));
+        scene.getStylesheets().add(ResourceManager.getStylesheet("settings_style"));
 
         stage.setScene(scene);
         stage.getIcons().add(I_STUDENT_LARGE);
         stage.setTitle("CounselorNotes");
 
-        stage.show();
+        root.setDisable(true);
+        Platform.runLater(loginScreen.pfield::requestFocus);
 
-        loginScreen.pfield.requestFocus();
+        stage.show();
     }
 
     public GridPane createTabPlaceholder() {
@@ -167,7 +169,7 @@ public class MainScreen {
 
         Button settings = new Button(null, ResourceManager.generateGlyph(FontAwesome.Glyph.GEAR.getChar(), 25, Color.BLACK));
         settings.setOnAction(event -> Platform.runLater(() -> {
-            overlay.showOverlayFade(new SettingsScreen().build(), Duration.seconds(0.5));
+            overlay.showOverlayFade(new SettingsScreen(overlay).build(), Duration.seconds(0.5));
         }));
         settings.setId("settings-button");
         settings.applyCss();

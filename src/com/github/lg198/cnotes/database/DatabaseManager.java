@@ -162,7 +162,7 @@ public class DatabaseManager {
     }
 
     public static CustomField getDefaultCustomField(String id) throws SQLException {
-        PreparedStatement ps = prep("SELECT * FROM fieldDef WHERE fieldId = ?");
+        PreparedStatement ps = prep("SELECT * FROM fieldDef WHERE id = ?");
         ps.setString(1, id);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
@@ -185,9 +185,11 @@ public class DatabaseManager {
     }
 
     public static void setDefaultCustfomFieldValue(String id, String value) throws SQLException {
-        PreparedStatement statement = prep("INSERT or REPLACE INTO customField (id, defaultValue) VALUES (?, ?)");
+        PreparedStatement statement = prep("INSERT or REPLACE INTO fieldDef (id, defaultValue, fieldType, name) VALUES (?, ?, (SELECT fieldType FROM fieldDef WHERE id = ?), (SELECT name FROM fieldDef WHERE id = ?))");
         statement.setString(1, id);
         statement.setString(2, value);
+        statement.setString(3, id);
+        statement.setString(4, id);
         statement.execute();
     }
 
@@ -234,11 +236,12 @@ public class DatabaseManager {
     }
 
     public static void updateNote(Note n) throws SQLException {
-        PreparedStatement statement = prep("INSERT or REPLACE INTO note VALUES (?, ?, ?, ?)");
+        PreparedStatement statement = prep("INSERT or REPLACE INTO note VALUES (?, ?, ?, ?, ?)");
         statement.setString(1, n.getId());
         statement.setString(2, n.getStudentId());
         statement.setString(3, n.getDateString());
         statement.setString(4, n.getContents());
+        statement.setString(5, n.getTitle());
         statement.execute();
     }
 
@@ -282,10 +285,6 @@ public class DatabaseManager {
         statement.setString(1, id);
         statement.setString(2, val);
         statement.execute();
-    }
-
-    public static boolean exec(String s) throws SQLException {
-        return connection.createStatement().execute(s);
     }
 
     public static PreparedStatement prep(String s) throws SQLException {

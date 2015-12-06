@@ -25,6 +25,8 @@ public class GridBuilder {
         grid.setVgap(gap);
     }
 
+    public void padding(Insets i) { grid.setPadding(i);}
+
     public void row() {
         row++;
         col = 0;

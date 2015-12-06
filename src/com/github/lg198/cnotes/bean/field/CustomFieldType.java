@@ -2,6 +2,7 @@ package com.github.lg198.cnotes.bean.field;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldListCell;
@@ -11,6 +12,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 public enum CustomFieldType {
@@ -65,16 +67,24 @@ public enum CustomFieldType {
         @Override
         public Region buildEditDefaultRegion(String def, Consumer c) {
             VBox box = new VBox();
-            String vals = def.split(";")[1];
-            String defval = def.split(";")[0];
-            ListView<String> lv = new ListView(FXCollections.observableArrayList(vals.split(",")));
+            ObservableList l;
+            String defval;
+            if (def.isEmpty()) {
+                l = FXCollections.observableArrayList();
+                defval = "";
+            } else {
+                String vals = def.split(";")[1];
+                defval = def.split(";")[0];
+                l = FXCollections.observableArrayList(vals.split(","));
+            }
+            ListView<String> lv = new ListView(l);
             lv.setEditable(true);
             lv.setCellFactory(TextFieldListCell.forListView());
 
             box.getChildren().add(lv);
 
             lv.getItems().addListener((ListChangeListener<? super String>) change -> {
-                c.accept(defval + ";" + String.join(",", lv.getItems()));
+                c.accept(defval + (defval.isEmpty() ? ";" : "") + String.join(",", lv.getItems()));
             });
 
             lv.setOnEditCommit(event -> {

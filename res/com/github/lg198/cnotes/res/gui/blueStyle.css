@@ -59,7 +59,7 @@
   -fx-background-radius: 0px;
 }
 .lg-tool-box-button:hover {
-  -fx-background-color: linear-gradient(to bottom, derive(#4380BE, 20%), #4380BE);
+  -fx-background-color: derive(#4380BE, 20%);
   -fx-cursor: hand;
 }
 
@@ -136,7 +136,17 @@
 }
 
 
-.lrg-button {
+.lg-button {
   -fx-background-color: derive(#73C1BB, -10%);
   -fx-text-fill: #02478E;
+}
+
+.lg-button:hover {
+    -fx-background-color: derive(#73C1BB, -20%);
+    -fx-cursor: hand;
+}
+.lg-button:pressed {
+    -fx-effect: innershadow(gaussian, derive(#73C1BB, -50%), 5, 0.5, 0, 0);
+    -fx-background-color: derive(#73C1BB, -25%);
+    -fx-text-fill: derive(#02478E, 13%);
 }

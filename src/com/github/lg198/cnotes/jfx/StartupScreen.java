@@ -83,42 +83,37 @@ public class StartupScreen {
         bbox.setSpacing(6);
         Button submit = new Button("Submit");
         submit.setStyle("-fx-cursor: hand;");
-        submit.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                if (!pfield.getText().equals(pcfield.getText())) {
-                    Alert a = new Alert(AlertType.WARNING);
-                    a.setTitle("");
-                    a.setHeaderText("Cannot create profile");
-                    a.setContentText("The passwords do not match!");
-                    a.showAndWait();
-                    return;
-                }
-                if (pfield.getText().isEmpty()) {
-                    Alert a = new Alert(AlertType.WARNING);
-                    a.setTitle("");
-                    a.setHeaderText("Cannot create profile");
-                    a.setContentText("The passwords may not be blank!");
-                    a.showAndWait();
-                    return;
-                }
-
-                Settings.setBackupFrequency(BackupFrequency.values()[backupChoices.getSelectionModel().getSelectedIndex()]);
-
-                try {
-                    Platform.setImplicitExit(false);
-                    stage.hide();
-                    Encryption.init(new String(pfield.getText()));
-                    Stage primary = new Stage();
-                    MainScreen ms = new MainScreen();
-                    ms.show(primary);
-                    Platform.setImplicitExit(true);
-                } catch (SQLException ex) {
-                    new ExceptionAlert("Error", "Unable to save password...", "CounselorNotes was unable to save your password profile.", ex);
-                }
+        submit.setOnAction(event -> {
+            if (!pfield.getText().equals(pcfield.getText())) {
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("");
+                a.setHeaderText("Cannot create profile");
+                a.setContentText("The passwords do not match!");
+                a.showAndWait();
+                return;
+            }
+            if (pfield.getText().isEmpty()) {
+                Alert a = new Alert(AlertType.WARNING);
+                a.setTitle("");
+                a.setHeaderText("Cannot create profile");
+                a.setContentText("The passwords may not be blank!");
+                a.showAndWait();
+                return;
             }
 
+            Settings.setBackupFrequency(BackupFrequency.values()[backupChoices.getSelectionModel().getSelectedIndex()]);
+
+            try {
+                Platform.setImplicitExit(false);
+                stage.hide();
+                Encryption.init(new String(pfield.getText()));
+                Stage primary = new Stage();
+                MainScreen ms = new MainScreen();
+                ms.show(primary);
+                Platform.setImplicitExit(true);
+            } catch (SQLException ex) {
+                new ExceptionAlert("Error", "Unable to save password...", "CounselorNotes was unable to save your password profile.", ex);
+            }
         });
         Button cancel = new Button("Cancel");
         cancel.setOnAction(event -> {

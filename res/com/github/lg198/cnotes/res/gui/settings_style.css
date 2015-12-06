@@ -1,0 +1,8 @@
+#s-exit-button {
+    -fx-font-size: 14px;
+    -fx-text-fill: blue;
+}
+
+#s-cf-list {
+    -fx-background-color: derive(#429EDB, 0%);
+}

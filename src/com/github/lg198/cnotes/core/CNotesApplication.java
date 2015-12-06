@@ -16,8 +16,11 @@ public class CNotesApplication extends Application {
         launch(args);
     }
 
+    public static Stage PRIMARY;
+
     @Override
     public void start(Stage primaryStage) {
+        PRIMARY = primaryStage;
         try {
             CounselorNotesMain.main(new String[0]);
         } catch (Exception ex) {
